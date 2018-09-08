@@ -4,8 +4,10 @@ import (
   "github.com/LyricalSecurity/gigo/helpers"
   "github.com/codegangsta/cli"
   "io/ioutil"
+  "log"
   "os"
   "os/exec"
+  "path"
   "strings"
 )
 
@@ -25,7 +27,7 @@ func Install(c *cli.Context) {
 
   file, err := ioutil.ReadFile(reqs)
   if err != nil {
-    println(err)
+    log.Fatal(err)
     os.Exit(3)
   }
 
@@ -35,12 +37,29 @@ func Install(c *cli.Context) {
 }
 
 // this is why GOPATH has to bet set in main.go
-func installFromGoGet(url string) error {
-  c := exec.Command("go", "get", url)
+func installFromGoGet(srcurl string) error {
+  parts := strings.Split(srcurl, "#")
+  
+  if len(parts) > 2 {
+    println("There can only be one hash on a line")
+    os.Exit(3)
+  }
+  
+  c := exec.Command("go", "get", parts[0])
   err := c.Run()
   if err != nil {
-    println(err)
+    log.Fatal(err)
     os.Exit(3)
+  }
+  
+  if len(parts) == 2 {
+    os.Chdir(path.Join("src", parts[0]))
+    c := exec.Command("git", "checkout", parts[1])
+    err := c.Run()
+    if err != nil {
+      log.Fatal(err)
+      os.Exit(3)
+    }
   }
 
   return nil
