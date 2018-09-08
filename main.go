@@ -1,7 +1,7 @@
 package main
 
 import (
-  "github.com/LyricalSecurity/gigo/actions"
+  "github.com/DominikUrban/gigo/actions"
   "github.com/codegangsta/cli"
   "log"
   "os"

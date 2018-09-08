@@ -1,7 +1,7 @@
 package actions
 
 import (
-  "github.com/LyricalSecurity/gigo/helpers"
+  "github.com/DominikUrban/gigo/helpers"
   "github.com/codegangsta/cli"
   "io/ioutil"
   "log"
